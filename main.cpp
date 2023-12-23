@@ -10,19 +10,19 @@
 bool InjectDLL(DWORD processId, const char* dllPath) {
     HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, processId);
     if (hProcess == NULL) {
-        std::cerr << "Fehler beim Öffnen des Zielprozesses." << std::endl;
+        std::cerr << "Error: Cannot Open Process." << std::endl;
         return false;
     }
 
     LPVOID pDllPath = VirtualAllocEx(hProcess, NULL, strlen(dllPath) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
     if (pDllPath == NULL) {
-        std::cerr << "Fehler beim Reservieren von Speicher im Zielprozess." << std::endl;
+        std::cerr << "Error: Memory Error." << std::endl;
         CloseHandle(hProcess);
         return false;
     }
 
     if (!WriteProcessMemory(hProcess, pDllPath, dllPath, strlen(dllPath) + 1, NULL)) {
-        std::cerr << "Fehler beim Schreiben des DLL-Pfads im Zielprozess." << std::endl;
+        std::cerr << "Error: Cannot write dll into Process" << std::endl;
         VirtualFreeEx(hProcess, pDllPath, 0, MEM_RELEASE);
         CloseHandle(hProcess);
         return false;
@@ -30,7 +30,7 @@ bool InjectDLL(DWORD processId, const char* dllPath) {
 
     HMODULE hKernel32 = GetModuleHandle("Kernel32");
     if (hKernel32 == NULL) {
-        std::cerr << "Fehler beim Laden der Kernel32-Bibliothek." << std::endl;
+        std::cerr << "Error: Cannot load Kernel32." << std::endl;
         VirtualFreeEx(hProcess, pDllPath, 0, MEM_RELEASE);
         CloseHandle(hProcess);
         return false;
@@ -38,7 +38,7 @@ bool InjectDLL(DWORD processId, const char* dllPath) {
 
     FARPROC pfnLoadLibrary = GetProcAddress(hKernel32, "LoadLibraryA");
     if (pfnLoadLibrary == NULL) {
-        std::cerr << "Fehler beim Suchen der LoadLibrary-Funktion." << std::endl;
+        std::cerr << "Error: Cannot load LoaderLibrary." << std::endl;
         VirtualFreeEx(hProcess, pDllPath, 0, MEM_RELEASE);
         CloseHandle(hProcess);
         return false;
@@ -46,7 +46,7 @@ bool InjectDLL(DWORD processId, const char* dllPath) {
 
     HANDLE hRemoteThread = CreateRemoteThread(hProcess, NULL, 0, (LPTHREAD_START_ROUTINE)pfnLoadLibrary, pDllPath, 0, NULL);
     if (hRemoteThread == NULL) {
-        std::cerr << "Fehler beim Erstellen des Remote-Threads." << std::endl;
+        std::cerr << "Error: Thread Error" << std::endl;
         VirtualFreeEx(hProcess, pDllPath, 0, MEM_RELEASE);
         CloseHandle(hProcess);
         return false;
@@ -66,14 +66,14 @@ DWORD SelectProcess() {
     DWORD bytesReturned;
 
     if (!EnumProcesses(processes.data(), static_cast<DWORD>(processes.size() * sizeof(DWORD)), &bytesReturned)) {
-        std::cerr << "Fehler beim Abrufen der Prozessliste." << std::endl;
+        std::cerr << "Error: Cannot load Process list" << std::endl;
         return 0;
     }
 
     const DWORD numProcesses = bytesReturned / sizeof(DWORD);
 
-    std::cout << "Laufende Prozesse:" << std::endl;
-    std::cout << "PID\tProcess Name" << std::endl;
+    std::cout << "Processes:" << std::endl;
+    std::cout << "PID\tProcess name" << std::endl;
 
     for (DWORD i = 0; i < numProcesses; ++i) {
         if (processes[i] != 0) {
@@ -89,7 +89,7 @@ DWORD SelectProcess() {
     }
 
     DWORD selectedPID;
-    std::cout << "\nGeben Sie die PID des Ziels ein: ";
+    std::cout << "\nEnter PID >> ";
     std::cin >> selectedPID;
 
     return selectedPID;
@@ -104,16 +104,16 @@ std::string SelectDLLPath() {
     ofn.lpstrFile = szFile;
     ofn.lpstrFile[0] = '\0';
     ofn.nMaxFile = sizeof(szFile);
-    ofn.lpstrFilter = "DLL-Dateien\0*.dll\0Alle Dateien\0*.*\0";
+    ofn.lpstrFilter = "DLL-Files\0*.dll\0All Files\0*.*\0";
     ofn.nFilterIndex = 1;
     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 
-    std::cout << "Wählen Sie die DLL aus..." << std::endl;
+    std::cout << "Sellect Dll" << std::endl;
 
     if (GetOpenFileName(&ofn) == TRUE) {
         return ofn.lpstrFile;
     } else {
-        std::cerr << "Fehler beim Öffnen des Dateiauswahlfensters." << std::endl;
+        std::cerr << "Error: Cannot open selector" << std::endl;
         return "";
     }
 }
@@ -122,7 +122,7 @@ int main() {
     std::string dllPath = SelectDLLPath();
 
     if (dllPath.empty()) {
-        std::cerr << "Ungültiger Dateipfad oder Auswahlabbruch." << std::endl;
+        std::cerr << "Error: Corrupt Path or Selection canceled." << std::endl;
         return 1;
     }
 
@@ -130,12 +130,12 @@ int main() {
 
     if (processId != 0) {
         if (InjectDLL(processId, dllPath.c_str())) {
-            std::cout << "DLL erfolgreich in den Prozess eingefügt." << std::endl;
+            std::cout << "DLL successful deployed." << std::endl;
         } else {
-            std::cerr << "Fehler beim Einfügen der DLL in den Prozess." << std::endl;
+            std::cerr << "Error: Deployment unsuccessful." << std::endl;
         }
     } else {
-        std::cerr << "Ungültige PID oder Fehler beim Auswahlprozess." << std::endl;
+        std::cerr << "Error: Unknown PID." << std::endl;
     }
 
     return 0;
