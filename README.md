@@ -27,6 +27,6 @@ DeltaModLoader is a versatile tool designed to streamline mod management and enh
 
 If you find DeltaModLoader helpful and wish to support its development, you can donate via Bitcoin:
 
-Bitcoin Address: 1ABCDEFghijklmnopqrstuvwxyz
+Bitcoin Address: bc1qyvc8gyplf3nd8plpz0fw3chf3vs499cxcywypd
 
 <img src=".readme-src/btc.webp" alt="Bitcoin Donation" width="50%">
