@@ -2,10 +2,10 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <Commdlg.h> // Für das Dateiauswahlfenster
+#include <Commdlg.h> 
 #include <TlHelp32.h>
 #include <Psapi.h>
-#pragma comment(lib, "Psapi.lib") // Fügt die Psapi-Bibliothek hinzu
+#pragma comment(lib, "Psapi.lib")
 
 bool InjectDLL(DWORD processId, const char* dllPath) {
     HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, processId);
