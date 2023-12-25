@@ -1,7 +1,7 @@
 # 💜 DeltaModLoader
  With DeltaModLoader you can load a dll file into your favourite games
  
----
+
 
 <div align="center">
     <a href="https://discord.gg/kqANTp65d3"><img src="https://img.shields.io/discord/1176947514742681613?logo=discord" alt="Discord"/></a>
@@ -18,20 +18,20 @@
 
 # 🤖 Features
 * You can load Dll's
----
+
 * Load Cheats or Mods
 
 # 👀 Instructions
 1. Download the latest release
----
-2. Open the Application
----
-3. Sellect your Dll
----
-4. Enter the Process ID for your game
----
-5. Enjoy the day
 
+2. Open the Application
+
+3. Sellect your Dll
+
+4. Enter the Process ID for your game
+
+5. Enjoy the day
+---
 # 💰 Donation
 
 If you like my projects your free to donate:
