@@ -1,5 +1,20 @@
 # 💜 DeltaModLoader
  With DeltaModLoader you can load a dll file into your favourite games
+ 
+---
+
+<div align="center">
+    <a href="https://discord.gg/kqANTp65d3"><img src="https://img.shields.io/discord/1176947514742681613?logo=discord" alt="Discord"/></a>
+    <br>
+    <img src="https://img.shields.io/github/last-commit/JustOfPlay/Delta" alt="GitHub last commit"/>
+    <img src="https://img.shields.io/github/commit-activity/w/JustOfPlay/Delta" alt="GitHub commit activity"/>
+    <img src="https://img.shields.io/github/contributors/JustOfPlay/Delta" alt="GitHub contributors"/>
+    <br>
+    <img src="https://img.shields.io/github/languages/code-size/JustOfPlay/Delta" alt="GitHub code size in bytes"/>
+    
+</div>
+
+---
 
 # 🤖 Features
 * You can load Dll's
